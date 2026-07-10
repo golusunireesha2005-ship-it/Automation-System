@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraTask | AI-Powered Task Reminder Automation</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+    <!-- Audio element for task alert -->
+    <audio id="notification-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-84.wav" preload="auto"></audio>
+    <!-- Header Navigation -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo-link" data-target="landing">
+                <div class="logo">
+                    <i data-lucide="sparkles" class="logo-icon"></i>
+                    <span class="logo-text">AuraTask</span>
+                </div>
+            </a>
+            <!-- Mobile Hamburger Menu Toggle -->
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+                <i data-lucide="menu"></i>
+            </button>
+            <!-- Navigation Links -->
+            <nav class="nav-menu" id="nav-menu">
+                <a href="#" class="nav-item active" data-target="landing">Home</a>
+                <a href="#" class="nav-item" data-target="about">About</a>
+                <a href="#" class="nav-item" data-target="help">Help</a>
+                <a href="#" class="nav-item" data-target="contact">Contact</a>
+                <a href="#" class="nav-item dashboard-link hidden" data-target="dashboard">Dashboard</a>
+                
+                <div class="nav-actions">
+                    <!-- Theme Toggle Button -->
+                    <button class="icon-btn" id="theme-toggle" title="Toggle Light/Dark Theme">
+                        <i data-lucide="moon" class="theme-icon-dark"></i>
+                        <i data-lucide="sun" class="theme-icon-light hidden"></i>
+                    </button>
+                    <!-- Auth Button -->
+                    <a href="#" class="btn btn-outline" id="auth-nav-btn" data-target="auth">Login</a>
+                    <!-- User Profile Dropdown (hidden by default) -->
+                    <div class="user-profile hidden" id="user-profile-menu">
+                        <span class="user-name" id="nav-user-name">User</span>
+                        <button class="btn btn-sm btn-outline-danger" id="logout-btn">
+                            <i data-lucide="log-out"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <!-- Main Container for dynamic views -->
+    <main class="main-content">
+        <!-- 1. LANDING PAGE VIEW -->
+        <section id="view-landing" class="view-section active">
+            <div class="hero-section">
+                <div class="hero-content">
+                    <div class="badge-ai"><i data-lucide="zap"></i> Next-Gen Productivity</div>
+                    <h1 class="hero-title">Automate Your Daily Workload with <span class="text-gradient">AI Reminders</span></h1>
+                    <p class="hero-subtitle">
+                        An intelligent task management system that schedules tasks from natural language, tracks progress with stunning visual analytics, and rings real-time alerts so you never miss a deadline.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#" class="btn btn-primary btn-lg" id="hero-primary-btn" data-target="auth">
+                            Get Started Free <i data-lucide="arrow-right"></i>
+                        </a>
+                        <a href="#" class="btn btn-secondary btn-lg" data-target="about">
+                            Learn More
+                        </a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-num">99.9%</span>
+                            <span class="stat-lbl">On-Time Reminders</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <span class="stat-num">10x</span>
+                            <span class="stat-lbl">Faster Scheduling</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <span class="stat-num">100%</span>
+                            <span class="stat-lbl">Local & Secure</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-graphic">
+                    <div class="graphic-card glass">
+                        <div class="card-header">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                            <span class="card-title">AI Smart Parser Demo</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="demo-chat">
+                                <div class="msg user-msg">
+                                    "Review marketing slides tomorrow at 4 PM high priority"
+                                </div>
+                                <div class="msg ai-msg">
+                                    <div class="ai-header"><i data-lucide="sparkles"></i> AI Parser Auto-Structured:</div>
+                                    <div class="parsed-data">
+                                        <div class="parsed-item"><strong>Title:</strong> Review marketing slides</div>
+                                        <div class="parsed-item"><strong>Due:</strong> Tomorrow</div>
+                                        <div class="parsed-item"><strong>Time:</strong> 16:00 (4:00 PM)</div>
+                                        <div class="parsed-item"><span class="badge priority-high">High Priority</span></div>
+                                    </div>
+                                    <span class="success-indicator"><i data-lucide="check-circle-2"></i> Task Scheduled Automatically!</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Features Grid Section -->
+            <div class="section-container container">
+                <h2 class="section-heading text-center">Engineered for Modern Professionals</h2>
+                <p class="section-subheading text-center">Unleash automated workflows to power through your day.</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card card">
+                        <div class="feature-icon-wrapper color-primary">
+                            <i data-lucide="brain"></i>
+                        </div>
+                        <h3 class="feature-title">AI-Powered Parsing</h3>
+                        <p class="feature-desc">Type your tasks naturally. AuraTask extracts due dates, times, and priorities automatically without clicking forms.</p>
+                    </div>
+                    <div class="feature-card card">
+                        <div class="feature-icon-wrapper color-info">
+                            <i data-lucide="bell-ring"></i>
+                        </div>
+                        <h3 class="feature-title">Real-Time Notifications</h3>
+                        <p class="feature-desc">Receive instant audio chime and screen notifications exactly when a task is due, preventing critical deadlines from slipping by.</p>
+                    </div>
+                    <div class="feature-card card">
+                        <div class="feature-icon-wrapper color-warning">
+                            <i data-lucide="pie-chart"></i>
+                        </div>
+                        <h3 class="feature-title">Dynamic Dashboard</h3>
+                        <p class="feature-desc">Monitor your productivity using beautiful glassmorphism cards tracking pending, completed, and overdue tasks at a glance.</p>
+                    </div>
+                    <div class="feature-card card">
+                        <div class="feature-icon-wrapper color-success">
+                            <i data-lucide="shield-check"></i>
+                        </div>
+                        <h3 class="feature-title">Private & Secure</h3>
+                        <p class="feature-desc">Your tasks and credential data remain strictly yours, stored safely in your browser local storage with zero cloud leaks.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 2. AUTHENTICATION VIEW (LOGIN & REGISTER) -->
+        <section id="view-auth" class="view-section">
+            <div class="auth-wrapper container">
+                <div class="auth-card card glass">
+                    <div class="auth-tabs">
+                        <button class="auth-tab-btn active" id="tab-login">Login</button>
+                        <button class="auth-tab-btn" id="tab-register">Register</button>
+                    </div>
+                    <!-- Login Form -->
+                    <form id="login-form" class="auth-form">
+                        <h2 class="form-title text-center">Welcome Back</h2>
+                        <p class="form-subtitle text-center">Log in to manage your AI automated schedule</p>
+                        
+                        <div class="form-group">
+                            <label for="login-email">Email Address</label>
+                            <div class="input-with-icon">
+                                <i data-lucide="mail"></i>
+                                <input type="email" id="login-email" required placeholder="you@example.com">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Password</label>
+                            <div class="input-with-icon">
+                                <i data-lucide="lock"></i>
+                                <input type="password" id="login-password" required placeholder="••••••••">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block btn-lg">
+                            Log In <i data-lucide="log-in"></i>
+                        </button>
+                    </form>
+                    <!-- Registration Form (hidden initially) -->
+                    <form id="register-form" class="auth-form hidden">
+                        <h2 class="form-title text-center">Create Account</h2>
+                        <p class="form-subtitle text-center">Get started with AuraTask today</p>
+                        <div class="form-group">
+                            <label for="reg-name">Full Name</label>
+                            <div class="input-with-icon">
+                                <i data-lucide="user"></i>
+                                <input type="text" id="reg-name" required placeholder="John Doe">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="reg-email">Email Address</label>
+                            <div class="input-with-icon">
+                                <i data-lucide="mail"></i>
+                                <input type="email" id="reg-email" required placeholder="you@example.com">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-password">Password</label>
+                            <div class="input-with-icon">
+                                <i data-lucide="lock"></i>
+                                <input type="password" id="reg-password" required minlength="6" placeholder="At least 6 characters">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-confirm-password">Confirm Password</label>
+                            <div class="input-with-icon">
+                                <i data-lucide="lock-keyhole"></i>
+                                <input type="password" id="reg-confirm-password" required minlength="6" placeholder="Confirm your password">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block btn-lg">
+                            Sign Up <i data-lucide="user-plus"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <!-- 3. DASHBOARD VIEW (AUTHENTICATED ONLY) -->
+        <section id="view-dashboard" class="view-section">
+            <div class="dashboard-container container">
+                
+                <!-- Welcome Banner -->
+                <div class="dashboard-header card glass">
+                    <div class="user-welcome">
+                        <h2 class="welcome-title">Hello, <span id="dashboard-user-name" class="text-gradient">Productive User</span>!</h2>
+                        <p class="welcome-subtitle">Here is a snapshot of your schedule today.</p>
+                    </div>
+                    <div class="header-date">
+                        <i data-lucide="calendar"></i>
+                        <span id="current-date-display">Friday, July 10, 2026</span>
+                    </div>
+                </div>
+                <!-- Stats Cards Row -->
+                <div class="stats-grid">
+                    <div class="stat-card card glass border-left-primary">
+                        <div class="stat-card-content">
+                            <span class="stat-card-label">Total Tasks</span>
+                            <span class="stat-card-val" id="stat-total">0</span>
+                        </div>
+                        <div class="stat-card-icon bg-light-primary">
+                            <i data-lucide="list-todo"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card card glass border-left-warning">
+                        <div class="stat-card-content">
+                            <span class="stat-card-label">Pending Tasks</span>
+                            <span class="stat-card-val" id="stat-pending">0</span>
+                        </div>
+                        <div class="stat-card-icon bg-light-warning">
+                            <i data-lucide="clock"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card card glass border-left-success">
+                        <div class="stat-card-content">
+                            <span class="stat-card-label">Completed Tasks</span>
+                            <span class="stat-card-val" id="stat-completed">0</span>
+                        </div>
+                        <div class="stat-card-icon bg-light-success">
+                            <i data-lucide="check-circle-2"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card card glass border-left-danger animate-pulse-border" id="overdue-stat-card">
+                        <div class="stat-card-content">
+                            <span class="stat-card-label">Overdue Tasks</span>
+                            <span class="stat-card-val text-danger" id="stat-overdue">0</span>
+                        </div>
+                        <div class="stat-card-icon bg-light-danger">
+                            <i data-lucide="alert-triangle"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- AI Quick Scheduler Input -->
+                <div class="ai-scheduler-card card glass">
+                    <div class="ai-title">
+                        <div class="ai-icon-pulse"><i data-lucide="sparkles"></i></div>
+                        <div>
+                            <h3 class="ai-card-title">AI Smart Input Parser</h3>
+                            <p class="ai-card-subtitle">Type tasks in natural language, and AuraTask will extract details instantly.</p>
+                        </div>
+                    </div>
+                    <form id="ai-quick-add-form" class="ai-form">
+                        <div class="ai-input-wrapper">
+                            <input type="text" id="ai-task-input" placeholder="e.g., Launch new product feature next Tuesday at 9 AM with high priority">
+                            <button type="submit" class="btn btn-primary" id="ai-parse-btn">
+                                Parse & Add <i data-lucide="plus-circle"></i>
+                            </button>
+                        </div>
+                        <div class="ai-tip-text">
+                            <strong>Tip:</strong> Try including keywords like <em>today</em>, <em>tomorrow</em>, <em>Monday</em>, <em>9 PM</em>, <em>high priority</em>, or <em>low priority</em>.
+                        </div>
+                    </form>
+                </div>
+                <!-- Task Board Filters & Actions -->
+                <div class="task-controls card">
+                    <div class="controls-left">
+                        <div class="search-box">
+                            <i data-lucide="search"></i>
+                            <input type="text" id="task-search-input" placeholder="Search tasks by title...">
+                        </div>
+                        <div class="filter-dropdown">
+                            <select id="filter-priority">
+                                <option value="all">All Priorities</option>
+                                <option value="High">High Priority</option>
+                                <option value="Medium">Medium Priority</option>
+                                <option value="Low">Low Priority</option>
+                            </select>
+                        </div>
+                        <div class="filter-dropdown">
+                            <select id="filter-status">
+                                <option value="all">All Statuses</option>
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                                <option value="overdue">Overdue</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="controls-right">
+                        <button class="btn btn-primary" id="open-add-task-modal">
+                            <i data-lucide="plus"></i> Add New Task
+                        </button>
+                    </div>
+                </div>
+                <!-- Task Grid Layout (Today, Upcoming, Completed) -->
+                <div class="task-grid">
+                    
+                    <!-- Today Column -->
+                    <div class="task-column">
+                        <div class="column-header">
+                            <div class="column-title">
+                                <span class="indicator bg-primary"></span>
+                                <h3>Due Today</h3>
+                            </div>
+                            <span class="task-count" id="count-today">0</span>
+                        </div>
+                        <div class="task-list-container" id="tasks-today-list">
+                            <!-- Tasks injected dynamically -->
+                        </div>
+                    </div>
+                    <!-- Upcoming Column -->
+                    <div class="task-column">
+                        <div class="column-header">
+                            <div class="column-title">
+                                <span class="indicator bg-info"></span>
+                                <h3>Upcoming Tasks</h3>
+                            </div>
+                            <span class="task-count" id="count-upcoming">0</span>
+                        </div>
+                        <div class="task-list-container" id="tasks-upcoming-list">
+                            <!-- Tasks injected dynamically -->
+                        </div>
+                    </div>
+                    <!-- Completed Column -->
+                    <div class="task-column">
+                        <div class="column-header">
+                            <div class="column-title">
+                                <span class="indicator bg-success"></span>
+                                <h3>Completed Tasks</h3>
+                            </div>
+                            <span class="task-count" id="count-completed-list">0</span>
+                        </div>
+                        <div class="task-list-container" id="tasks-completed-list">
+                            <!-- Tasks injected dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 4. ABOUT PAGE VIEW -->
+        <section id="view-about" class="view-section">
+            <div class="info-page-container container">
+                <div class="info-card card glass">
+                    <h1 class="page-title text-gradient text-center">About AuraTask</h1>
+                    <p class="lead-text text-center">
+                        Redefining personal task management using browser automation and natural language parsing.
+                    </p>
+                    
+                    <div class="about-grid">
+                        <div class="about-block">
+                            <h3>Our Vision</h3>
+                            <p>
+                                AuraTask was built to bridge the gap between simple calendar apps and complicated project management software. We believe tracking your time and schedule should require minimal manual overhead. By integrating smart NLP (Natural Language Processing) right in the UI, tasks configure themselves from single sentences.
+                            </p>
+                        </div>
+                        <div class="about-block">
+                            <h3>Technological Stack</h3>
+                            <ul>
+                                <li><strong>Client Shell:</strong> Semantic HTML5 structure with modern, CSS custom properties.</li>
+                                <li><strong>Styling engine:</strong> Clean Vanilla CSS layout systems (Grid/Flexbox) with a unified glassmorphism theme, dark mode utilities, and keyframe animations.</li>
+                                <li><strong>Application logic:</strong> Clean ES6 Javascript, utilizing LocalStorage for fast data caching and secure user management.</li>
+                                <li><strong>Engine notifications:</strong> HTML5 Web Notification API paired with synthetic sound notification system.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="architecture-flow mt-4">
+                        <h3 class="text-center mb-3">Application Pipeline</h3>
+                        <div class="flow-steps">
+                            <div class="flow-step">
+                                <div class="step-icon"><i data-lucide="keyboard"></i></div>
+                                <span>1. Natural Input</span>
+                            </div>
+                            <div class="flow-arrow"><i data-lucide="arrow-right"></i></div>
+                            <div class="flow-step">
+                                <div class="step-icon"><i data-lucide="brain"></i></div>
+                                <span>2. AI Parse Engine</span>
+                            </div>
+                            <div class="flow-arrow"><i data-lucide="arrow-right"></i></div>
+                            <div class="flow-step">
+                                <div class="step-icon"><i data-lucide="database"></i></div>
+                                <span>3. Storage & State</span>
+                            </div>
+                            <div class="flow-arrow"><i data-lucide="arrow-right"></i></div>
+                            <div class="flow-step">
+                                <div class="step-icon"><i data-lucide="bell-ring"></i></div>
+                                <span>4. Real-time Alarm</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 5. HELP PAGE VIEW -->
+        <section id="view-help" class="view-section">
+            <div class="info-page-container container">
+                <div class="info-card card glass">
+                    <h1 class="page-title text-gradient text-center">Help & User Guide</h1>
+                    <p class="lead-text text-center">Learn how to make the most of AuraTask's scheduling tools.</p>
+                    
+                    <div class="faq-container">
+                        <h2>Frequently Asked Questions</h2>
+                        
+                        <div class="faq-item">
+                            <h3 class="faq-q">How does the AI Smart Input Parser work?</h3>
+                            <p class="faq-a">
+                                Simply write details about your task in one natural phrase in the AI Smart Input box on the dashboard. Our engine searches for key indicators such as priorities ("high", "medium", "low"), days ("today", "tomorrow", "Monday", "Friday"), and time notations ("9 AM", "16:30", "at 4 PM"). The task is then structured and saved instantly!
+                            </p>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <h3 class="faq-q">Will my task reminders function if the tab is in the background?</h3>
+                            <p class="faq-a">
+                                Yes! AuraTask's background clock runs continuously as long as the application page remains open in a browser tab. For optimal alerts, grant permission to "Show Notifications" when prompted, enabling system-wide desktop notifications.
+                            </p>
+                        </div>
+                        <div class="faq-item">
+                            <h3 class="faq-q">Is my personal information stored securely?</h3>
+                            <p class="faq-a">
+                                Absolutely. AuraTask has a serverless design. All user authentication details, hashes, and task objects are written directly to your web browser's local sandbox storage (`localStorage`). No network calls are made, meaning absolute offline privacy.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="nl-cheatsheet card bg-light mt-4">
+                        <h3>AI Parse Syntax Examples</h3>
+                        <table class="cheatsheet-table">
+                            <thead>
+                                <tr>
+                                    <th>Command Typed</th>
+                                    <th>Derived Date</th>
+                                    <th>Derived Time</th>
+                                    <th>Derived Priority</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><em>"Sync with developers at 11 AM high priority"</em></td>
+                                    <td>Today</td>
+                                    <td>11:00 AM</td>
+                                    <td><span class="badge priority-high">High</span></td>
+                                </tr>
+                                <tr>
+                                    <td><em>"Pay electricity bill tomorrow at 8 PM"</em></td>
+                                    <td>Tomorrow</td>
+                                    <td>08:00 PM</td>
+                                    <td><span class="badge priority-medium">Medium</span></td>
+                                </tr>
+                                <tr>
+                                    <td><em>"Plan family dinner next Friday at 6:30 PM low priority"</em></td>
+                                    <td>Next Friday</td>
+                                    <td>06:30 PM</td>
+                                    <td><span class="badge priority-low">Low</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 6. CONTACT PAGE VIEW -->
+        <section id="view-contact" class="view-section">
+            <div class="info-page-container container">
+                <div class="contact-card card glass">
+                    <div class="contact-header text-center">
+                        <h1 class="page-title text-gradient">Get In Touch</h1>
+                        <p class="lead-text">Have feedback, support issues, or ideas for AuraTask? Drop us a line!</p>
+                    </div>
+                    <div class="contact-grid">
+                        <div class="contact-info">
+                            <h3>Reach Us Directly</h3>
+                            <p>We read every submission and respond to support queries within 24 hours.</p>
+                            
+                            <div class="contact-details">
+                                <div class="detail-item">
+                                    <i data-lucide="mail"></i>
+                                    <div>
+                                        <h4>Email</h4>
+                                        <span>support@auratask.io</span>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <i data-lucide="map-pin"></i>
+                                    <div>
+                                        <h4>Location</h4>
+                                        <span>Silicon Valley, CA</span>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <i data-lucide="github"></i>
+                                    <div>
+                                        <h4>Repository</h4>
+                                        <span>github.com/auratask/reminder-system</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contact-form-wrapper">
+                            <form id="contact-form">
+                                <div class="form-group">
+                                    <label for="contact-name">Name</label>
+                                    <input type="text" id="contact-name" required placeholder="John Doe">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contact-email">Email Address</label>
+                                    <input type="email" id="contact-email" required placeholder="john@example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contact-subject">Subject</label>
+                                    <input type="text" id="contact-subject" required placeholder="Feature Request / Feedback / bug">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contact-message">Message</label>
+                                    <textarea id="contact-message" rows="5" required placeholder="Write your message here..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    Send Message <i data-lucide="send"></i>
+                                </button>
+                            </form>
+                            <div id="contact-success" class="contact-success-msg hidden">
+                                <i data-lucide="check-circle-2" class="success-icon animate-bounce"></i>
+                                <h3>Thank you!</h3>
+                                <p>Your message has been sent successfully. We will get back to you shortly.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Task Add/Edit Dialog Modal -->
+    <div class="modal-backdrop hidden" id="task-modal">
+        <div class="modal card glass animate-slide-up">
+            <div class="modal-header">
+                <h3 id="modal-title">Create New Task</h3>
+                <button class="modal-close" id="close-task-modal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form id="task-form">
+                <input type="hidden" id="task-id">
+                
+                <div class="form-group">
+                    <label for="task-title">Task Title</label>
+                    <input type="text" id="task-title" required placeholder="e.g. Prepare presentation slides">
+                </div>
+                <div class="form-group">
+                    <label for="task-desc">Description</label>
+                    <textarea id="task-desc" rows="3" placeholder="Explain the key steps or links for this task..."></textarea>
+                </div>
+                <div class="modal-row">
+                    <div class="form-group">
+                        <label for="task-priority">Priority</label>
+                        <select id="task-priority">
+                            <option value="Low">Low</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-due-date">Due Date</label>
+                        <input type="date" id="task-due-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-due-time">Due Time</label>
+                        <input type="time" id="task-due-time" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancel-task-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="save-task-btn">Save Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Task Detail/Alert Dialog Modal -->
+    <div class="modal-backdrop hidden" id="alert-modal">
+        <div class="modal card glass alert-modal-content animate-slide-up">
+            <div class="alert-modal-header text-center">
+                <div class="alarm-icon-bell animate-ring"><i data-lucide="bell"></i></div>
+                <h2 class="text-danger mt-2">Task Due Reminder!</h2>
+            </div>
+            <div class="alert-modal-body text-center mt-3">
+                <h3 id="alert-task-title" class="alert-title-text">Task Title</h3>
+                <p id="alert-task-desc" class="alert-desc-text">Task description goes here.</p>
+                <div class="alert-meta-row mt-2">
+                    <span class="badge" id="alert-task-priority">High Priority</span>
+                    <span class="time-stamp" id="alert-task-time">Due at 4:00 PM</span>
+                </div>
+            </div>
+            <div class="modal-footer justify-center mt-4">
+                <button type="button" class="btn btn-success" id="alert-complete-btn">Mark as Completed</button>
+                <button type="button" class="btn btn-secondary" id="alert-dismiss-btn">Dismiss Alarm</button>
+            </div>
+        </div>
+    </div>
+    <!-- AI Floating Chat Assistant -->
+    <div class="ai-chat-widget closed" id="ai-chat-widget">
+        <!-- Floating Circle Button -->
+        <button class="ai-chat-btn" id="ai-chat-btn" title="Open AI Coach">
+            <i data-lucide="message-square" class="chat-icon-open"></i>
+            <i data-lucide="x" class="chat-icon-close hidden"></i>
+            <span class="ai-pulse-dot"></span>
+        </button>
+        <!-- Chat Window -->
+        <div class="ai-chat-window card glass">
+            <div class="chat-window-header">
+                <div class="ai-avatar">
+                    <i data-lucide="sparkles"></i>
+                </div>
+                <div>
+                    <h4>Aura AI Productivity Coach</h4>
+                    <span class="ai-status">Online • Analyzer</span>
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="chat-messages">
+                <div class="chat-bubble ai">
+                    Hello! I'm Aura. I can help analyze your tasks, break them down, or provide time management coaching. What's on your mind today?
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Ask for suggestions or workload advice...">
+                <button class="chat-send-btn" id="chat-send-btn">
+                    <i data-lucide="send"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2026 AuraTask. Created with modern web standards and local privacy.</p>
+            <div class="footer-links">
+                <a href="#" data-target="about">About</a>
+                <a href="#" data-target="help">Help</a>
+                <a href="#" data-target="contact">Contact</a>
+            </div>
+        </div>
+    </footer>
+    <!-- App scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/tasks.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
